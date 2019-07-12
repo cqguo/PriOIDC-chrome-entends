@@ -48,6 +48,7 @@ function startLogin(url, re){
 	count = 0;
 	count1 = 0;
 	basicUrl = url
+	var loginUrl = url + "/login";
 	var xmlhttp;
 	if (window.XMLHttpRequest)
 	{
@@ -162,10 +163,6 @@ function uploadpk(url, result, pk){
 		{
 			obj = JSON.parse(xmlhttp.responseText)
 			client_id = obj.client_id;
-			//if(obj.result=="error"){
-			//	startLogin(url, 1);
-			//	return;
-			//}
 			var localClient_idbn = nbi();
 			localClient_idbn.fromString(generateModPow(basic_client_id, result, P));
 			var client_idbn = nbi();
@@ -186,8 +183,8 @@ function uploadpk(url, result, pk){
 function doRegistration(url){
 	var registrationUrl = "http://10.10.81.42:8080/openid-connect-server-webapp/register"
 	var xmlhttp;
-	var date = new Date();			
-	var p1 = date.getTime();
+	// var date = new Date();
+	// var p1 = date.getTime();
 	if (window.XMLHttpRequest)
 	{
 		//  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
@@ -213,8 +210,8 @@ function doRegistration(url){
 	}
 	xmlhttp.open("POST",registrationUrl,true);
 	var body = "{\"client_id\":\"" + client_id + "\",\"application_type\":\"web\",\"client_name\":\"M_OIDC\",\"redirect_uris\":\"http://oidcupload.12450.com/token\", \"grant_types\": \"implicit\"}"// \"response_types\": [\"id_token\", \"token\"],
-	var date = new Date();
-	point1 = date.getTime();
+	// var date = new Date();
+	// point1 = date.getTime();
 	xmlhttp.send(body);
 }
 
@@ -238,8 +235,8 @@ function register_finished(responseText, url){
 	xmlhttp.open("POST",register_finishedUrl,true);
 	var body = "{\"client_id\":\"" + client_id + "\",\"ID\":\"" +ID+ "\",\"redirect_uri\":\"http://oidcupload.12450.com/token\",\"resultOK\":\"true\"}"
 	xmlhttp.send(body);
-	var date = new Date();
-	tokenStart = date.getTime();
+	// var date = new Date();
+	// tokenStart = date.getTime();
 }
 
 function doAuthorize(url){
