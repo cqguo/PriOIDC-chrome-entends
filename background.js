@@ -1,6 +1,8 @@
 var P = "27449016760001930830125617668247859359745430986704432309085929677995807338305678419885652753794242496407976182871494825520552812933077776662415387179356727792234451654055658177210561689664280863983972105655690337291450879107894692596167210983185326590416340066192826004270803522574046051860102165172244586056707834948333241005980694712476760216030160395462421297530733396614124258707965156976358959843617034441619164457098759725517618250918992025137481460788874501395889763568442978210065547845149324569983455235117868998436516548293413794803510612425480720620581614363153446128915785524341773999191504845709308817083";
-var g = "3", ID, access_token, basicUrl, parameters, basic_client_id,client_id, tokenStart, tokenEnd, RPCert, count = 0, count1 = 0, num = 0;
+var g = "3", ID, access_token, basicUrl, parameters, basic_client_id,client_id, RPCert, count = 0, count1 = 0, num = 0;
 var pk_server, pk_client, sk_server, sk_client, result, hex_sk_client;
+var start, point1, point2, point3;
+
 chrome.extension.onMessage.addListener(
     function(request, sender, sendResponse) {
 		var tokenUrl = basicUrl + "/authorization?" + parameters + "&ID=" + ID;
@@ -40,8 +42,9 @@ chrome.webRequest.onBeforeRequest.addListener (
     ["blocking"] 
 );
 
-function startLogin(url, console){
-	console.log("test")
+function startLogin(url, re){
+	var date = new Date();
+	start = date.getTime();
 	count = 0;
 	count1 = 0;
 	basicUrl = url
@@ -60,14 +63,13 @@ function startLogin(url, console){
 	{
 		if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
-
+			var date = new Date();
+			point2 = date.getTime();
 			obj = JSON.parse(xmlhttp.responseText)
 			pk_server = obj.pk_server
 			g = obj.g
 			ID = obj.ID
 			RPCert = obj.RPCert;
-					
-			
 			var pKey = KEYUTIL.getKey("-----BEGIN PUBLIC KEY-----\n" +
 									"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnzyis1ZjfNB0bBgKFMSv\n" +
 									"vkTtwlvBsaJq7S5wA+kzeVOVpVWwkWdVha4s38XM/pa/yr47av7+z3VTmvDRyAHc\n" +
@@ -136,6 +138,8 @@ function startLogin(url, console){
 		}
 	}
 	xmlhttp.open("GET",loginUrl,true);
+	var date = new Date();
+	point1 = date.getTime();
 	xmlhttp.send();
 }
 
@@ -173,6 +177,9 @@ function uploadpk(url, result, pk){
 	}
 	xmlhttp.open("POST",uploadpkUrl,true);
 	var body = "{\"ID\":\"" + ID + "\",\"pk_client\":\"" + pk + "\", \"result\":\"" + result + "\"}"
+	var date = new Date();
+	point3 = date.getTime();
+	console.log("Negotiation: " + (point3 + point1 - point2 - start));
 	xmlhttp.send(body);
 }
 
